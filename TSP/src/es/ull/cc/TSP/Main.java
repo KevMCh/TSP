@@ -12,6 +12,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 
 		TSP_INPUT problem = new TSP_INPUT();
+		TSP_TOUR  mytour = new TSP_TOUR();
 		
 		int op = 3;
 		
@@ -19,8 +20,9 @@ public class Main {
 			
 			System.out.println("\nMenú:");
 			System.out.println("\n\t1. Leer fichero.");
-			System.out.println("\n\t2. Imprimir datos problema.");			
-			System.out.println("\n\t3. Salir.\n");
+			System.out.println("\n\t2. Imprimir datos problema.");
+			System.out.println("\n\t3. Buscar un tour.");
+			System.out.println("\n\t4. Salir.\n");
 			
 			System.out.println("\nIntroduce opción:\n");
 			
@@ -49,6 +51,15 @@ public class Main {
 				
 				case 3:{
 					
+					mytour = new TSP_TOUR(problem);
+					mytour.newTour();
+					mytour.print();
+					
+					break;
+				}
+				
+				case 4:{
+					
 					System.out.println ("Apagando..");
 					
 					break;
@@ -63,6 +74,6 @@ public class Main {
                 }
 			}
 			
-		}while(op!=3);
+		}while(op!=4);
 	}
 }
