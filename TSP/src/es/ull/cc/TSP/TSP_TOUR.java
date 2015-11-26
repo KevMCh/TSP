@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class TSP_TOUR {
 	
-	static final double INF = 1e100;
+	static final double INF = Double.MAX_VALUE;
 	
 	private TSP_INSTANCE tsp;
 	
@@ -80,7 +80,9 @@ public class TSP_TOUR {
 		
 		Random rnd = new Random();
 		
-		start = (int)(rnd.nextDouble() * tsp.getN() + 0);
+		//start = (int)(rnd.nextDouble() * tsp.getN() + 0);
+		
+		start = 0;
 		
 		visited[start] = true;
 		aux.add(start);
@@ -96,13 +98,15 @@ public class TSP_TOUR {
 					
 					if(tsp.getMatrixItem(start, i) < vertexValue){
 						
+						vertexValue = tsp.getMatrixItem(start, i);
+						
 						destinity = i;
 					}
 				}
 			}
 			
 			start = destinity;
-			
+			vertexValue = INF;
 			visited[start] = true;
 			aux.add(start);
 		}
@@ -125,44 +129,37 @@ public class TSP_TOUR {
 
 	private ArrayList<Integer> twoOPT(ArrayList<Integer> bT){
 		
+		boolean found = true;
+		
 		Double newTourValue = INF;
-		Double bestDistance = calculateTourValue(tour);
+		Double bestDistance = calculateTourValue(bT);
 		
 		ArrayList<Integer> newTour = new ArrayList<Integer> ();
 		ArrayList<Integer> bestTour = bT;
 		
-		while(true){
-			
-			boolean found = false;
+		while(found){
 
 			for (int i=0; i<tsp.getN()-1; i++){
-				
-				if(found == true){
-					
-					break;
-				}
 				
 				for (int k=i+1; k<tsp.getN(); k++){
 					
 					newTour = twoOptSwap(bestTour, i, k);
+					
 					newTourValue = calculateTourValue(newTour);
 					
-					if (newTourValue < bestDistance) {
+					if (newTourValue < bestDistance){
 		            	
 		            	bestDistance = newTourValue;
 		                bestTour = newTour;
-		                
 		                found = true;
-		                
 		                break;
+		                
+		            }else{
+		            	
+		            	found = false;
 		            }
 		        }
 		    }
-			
-			if (newTourValue >= bestDistance){
-            	
-            	break;
-            }
 		}
 		
 		return bestTour;
@@ -172,7 +169,7 @@ public class TSP_TOUR {
 		
 		ArrayList<Integer> newRoute = new ArrayList<Integer> ();
 			
-		for(int j=0; j<=i-1; j++){
+		for(int j=0; j<i; j++){
 			
 			newRoute.add(bestTour.get(j));
 		}
@@ -194,10 +191,12 @@ public class TSP_TOUR {
 		
 		Double auxTourValue = 0.0;
 		
-		for(int i=1; i<aux.size(); i++){
+		for(int i=0; i<aux.size()-1; i++){
 			
-			auxTourValue += tsp.getMatrixItem(aux.get(i-1), aux.get(i));
+			auxTourValue += tsp.getMatrixItem(aux.get(i), aux.get(i+1));
 		}
+		
+		auxTourValue += tsp.getMatrixItem((aux.get(aux.size()-1)), aux.get(0));
 		
 		return auxTourValue;
 	}
