@@ -80,9 +80,7 @@ public class TSP_TOUR {
 		
 		Random rnd = new Random();
 		
-		//start = (int)(rnd.nextDouble() * tsp.getN() + 0);
-		
-		start = 0;
+		start = (int)(rnd.nextDouble() * tsp.getN() + 0);
 		
 		visited[start] = true;
 		aux.add(start);
