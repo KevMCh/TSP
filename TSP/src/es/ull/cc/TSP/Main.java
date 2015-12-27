@@ -53,6 +53,15 @@ public class Main {
 					
 					mytour = new TSP_TOUR(problem);
 					mytour.newTour();
+					
+					
+					System.out.println("\tNN Algoritm y 2-OPT:\n");
+					mytour.print();
+					
+					mytour.searchTreeBB();
+					
+					
+					System.out.println("\n\tÁrbol de ramificación:\n");
 					mytour.print();
 					
 					break;

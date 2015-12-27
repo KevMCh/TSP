@@ -62,6 +62,13 @@ public class TSP_TOUR {
 		
 		return tour;
 	}
+	
+	public void searchTreeBB(){
+		
+		TREE_BB treeBB = new TREE_BB(tour, tourValue, tsp);
+		
+		update(treeBB.getFinalTour());
+	}
 
 /*****************************************************************************************************************************************************************/
 
@@ -124,40 +131,47 @@ public class TSP_TOUR {
 		
 		return true;
 	}
-
-	private ArrayList<Integer> twoOPT(ArrayList<Integer> bT){
+	
+	private ArrayList<Integer> twoOPT(ArrayList<Integer> bT) {
 		
-		boolean found = true;
+		boolean go_start = false;
+		boolean improvement = true;
 		
-		Double newTourValue = INF;
-		Double bestDistance = calculateTourValue(bT);
+		double tempValue = calculateTourValue(bT);
+		double bestValue = calculateTourValue(bT);
 		
-		ArrayList<Integer> newTour = new ArrayList<Integer> ();
+		ArrayList<Integer> tempTour = bT;
 		ArrayList<Integer> bestTour = bT;
-		
-		while(found){
 
-			for (int i=0; i<tsp.getN()-1; i++){
+		while(improvement){
+			
+			improvement = false;
+			
+			for(int i=0; i < tsp.getN();i++){
 				
-				for (int k=i+1; k<tsp.getN(); k++){
+				if(go_start){
 					
-					newTour = twoOptSwap(bestTour, i, k);
+					break;
+				}
+				
+				for(int k= i+1; k < tsp.getN(); k++){
 					
-					newTourValue = calculateTourValue(newTour);
+					tempTour = twoOptSwap(tempTour, i, k);
+					tempValue = calculateTourValue(tempTour);
 					
-					if (newTourValue < bestDistance){
-		            	
-		            	bestDistance = newTourValue;
-		                bestTour = newTour;
-		                found = true;
-		                break;
-		                
-		            }else{
-		            	
-		            	found = false;
-		            }
-		        }
-		    }
+					if(tempValue < bestValue){
+						
+						bestValue = tempValue;
+						bestTour = tempTour;
+						improvement = true;
+						go_start = true;
+						
+						break;
+					
+					}
+				}
+			}
+			
 		}
 		
 		return bestTour;
@@ -194,7 +208,10 @@ public class TSP_TOUR {
 			auxTourValue += tsp.getMatrixItem(aux.get(i), aux.get(i+1));
 		}
 		
-		auxTourValue += tsp.getMatrixItem((aux.get(aux.size()-1)), aux.get(0));
+		if(aux.size()>0){
+			
+			auxTourValue += tsp.getMatrixItem((aux.get(aux.size()-1)), aux.get(0));
+		}
 		
 		return auxTourValue;
 	}
